@@ -1,0 +1,10 @@
+{
+    "editor.fontSize": 16,
+    "editor.fontLigatures": true,
+    "editor.fontWeight": "normal",
+    "terminal.integrated.shellArgs.windows": [
+        "-NoExit",
+        "-Command",
+        "${workspaceFolder}/build_scripts/windows/set_aliases.ps1"
+    ]
+}
