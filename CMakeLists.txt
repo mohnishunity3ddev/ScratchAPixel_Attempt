@@ -20,4 +20,7 @@ endif()
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
+# Include Common
+include_directories(common)
+
 add_subdirectory(src/Chapter01/01.getting.started)
