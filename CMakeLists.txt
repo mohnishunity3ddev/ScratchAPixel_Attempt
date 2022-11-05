@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22.0)
 
-project(LearnOpenGL-Attempt CXX C)
+project(ScratchAPixel CXX C)
 
 set(EXTERN_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external)
 

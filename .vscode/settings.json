@@ -6,5 +6,9 @@
         "-NoExit",
         "-Command",
         "${workspaceFolder}/build_scripts/windows/set_aliases.ps1"
-    ]
+    ],
+    "files.associations": {
+        "cmath": "cpp",
+        "iomanip": "cpp"
+    }
 }
