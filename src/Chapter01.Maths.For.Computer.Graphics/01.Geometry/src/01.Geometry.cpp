@@ -1,5 +1,5 @@
 #include <iostream>
-#include <linear_algebra/jmath.h>
+#include <jmath.h>
 
 int main() {
     Vec3f myFloat{ 1.0f, 2.0f, 3.0f };
