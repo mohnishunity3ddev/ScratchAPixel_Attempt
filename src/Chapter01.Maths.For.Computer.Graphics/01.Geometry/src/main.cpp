@@ -48,8 +48,5 @@ int main() {
     d.invert(); 
     std::cerr << d << std::endl; 
  
-    return 0; 
-
-    
-    return 0;
+    return 0;                                                                 
 }

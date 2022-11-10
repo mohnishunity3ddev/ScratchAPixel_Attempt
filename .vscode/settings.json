@@ -1,5 +1,6 @@
 {
-    "editor.fontSize": 16,
+    "editor.fontSize": 14,
+    "editor.fontFamily": "'CaskaydiaCove NF Mono'",
     "editor.fontLigatures": true,
     "editor.fontWeight": "normal",
     "terminal.integrated.shellArgs.windows": [

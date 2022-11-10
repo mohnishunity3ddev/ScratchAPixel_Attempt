@@ -22,5 +22,7 @@ find_package(OpenGL REQUIRED)
 
 # Include Common
 include_directories(common)
+add_subdirectory(common)
 
-add_subdirectory(src/Chapter01/01.getting.started)
+
+add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.Geometry)

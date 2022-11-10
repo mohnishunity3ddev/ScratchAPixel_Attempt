@@ -5,16 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(Windows) Launch",
+            "name": "(Windows) Launch Generic Debug",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src/Chapter01/01.getting.started/bin/01.getting.started_Debug.exe",
+            "program": "${fileDirname}/../bin/${fileBasenameNoExtension}_Debug.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "(Windows) Launch Generic Release",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${fileDirname}/../bin/${fileBasenameNoExtension}_Release.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "console": "integratedTerminal"
         }
-
     ]
 }

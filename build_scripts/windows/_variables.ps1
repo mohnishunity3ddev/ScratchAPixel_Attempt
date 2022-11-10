@@ -1,5 +1,5 @@
 # all variables used in ps1 files
-Set-Variable -Name PROJECT_NAME -Value "LearnOpenGL-Attempt"
+Set-Variable -Name PROJECT_NAME -Value "ScratchAPixel"
 
 Set-Variable -Name BUILD_SCRIPTS_DIR_PATH -Value $PSScriptRoot
 Set-Variable -Name PROJECT_ROOT_PATH_RELATIVE_FROM_SCRIPT -Value ..\..
