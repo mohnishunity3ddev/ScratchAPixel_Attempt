@@ -59,6 +59,63 @@ public:
 typedef Vec3<float> Vec3f;
 typedef Vec3<int> Vec3i;
 
+// Z Axis is the Up Vector. X is right and Y is forward.
+template<typename T>
+Vec3<T> sphericalToCartesian(const T &theta, const T &phi)
+{
+    return Vec3<T>(cos(phi)*sin(theta), sin(phi)*sin(theta), cos(theta));
+}
+
+// Angle subtended by the Up Vector ie Z Axis
+template<typename T>
+inline T sphericalTheta(const Vec3<T> &v)
+{
+    return acos(clamp<T>(v.z, -1, 1));
+}
+
+// Angle subtended by the Right Vector ie X Axis
+template<typename T>
+inline T sphericalPhi(const Vec3<T> &v)
+{
+    T p = atan2(v.y, v.x); // returned range is [-pi, pi]
+    
+    // converting this to [0, 2*pi]
+    return (p < 0) ? p + 2 * M_PHI : p;
+}
+
+// Angle subtended by the Up Vector ie Z Axis
+template<typename T>
+inline T cosTheta(const Vec3<T> &v)
+{
+    return norm.z;
+}
+
+// Angle subtended by the Up Vector ie Z Axis
+template<typename T>
+inline T sinTheta(const Vec3<T> &v)
+{
+    T cosTheta = cosTheta(v);
+    return sqrtf(1.0f - cosTheta*cosTheta);
+}
+
+// angle subtended by the right vector ie X Axis
+template<typename T>
+inline T cosPhi(const Vec3<T> &v)
+{
+    T sinTheta = sinTheta(v);
+    if(sinTheta == 0) return 1; // Phi is 0.
+    return clamp<T>(v.x / sinTheta, -1, 1);
+}
+
+// angle subtended by the up vector ie X Axis
+template<typename T>
+inline T sinPhi(const Vec3<T> &v)
+{
+    T sinTheta = sinTheta(v);
+    if(sinTheta == 0) return 1; // Phi is 0.
+    return clamp<T>(v.y / sinTheta, -1, 1);
+}
+
 template<typename T>
 class Matrix44 {
 public:
