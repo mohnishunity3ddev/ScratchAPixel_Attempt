@@ -10,12 +10,16 @@ set(CMAKE_CXX_EXTENSIONS ON)
 
 # Definitions
 if(WIN32)
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
+
 option(USE_DEBUG "Enter debug mode" OFF)
-if (USE_DEBUG)
+
+if(USE_DEBUG)
   add_definitions(-DDEBUG)
 endif()
+
+add_definitions(-DROW_MAJOR)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
@@ -24,6 +28,6 @@ find_package(OpenGL REQUIRED)
 include_directories(common)
 add_subdirectory(common)
 
-
 add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.Geometry)
 add_subdirectory(src/Chapter02.3D_Rendering_For_Beginners/02.1.IntroToRayTracing)
+add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/02.matrix.inverse.gauss.jordan.method)
