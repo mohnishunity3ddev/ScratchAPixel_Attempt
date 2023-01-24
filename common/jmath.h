@@ -1,56 +1,124 @@
-#pragma once
+#if !defined(_JMATH_H_)
+#define _JMATH_H_
 
 #include <iomanip>
 
-template<typename T>
-class Vec3 {
-public:
-    // 3 most basic ways to initialize a vector
+template <typename T> 
+class Vec3
+{
+  public:
     Vec3() : x(T(0)), y(T(0)), z(T(0)) {}
     Vec3(const T &xx) : x(xx), y(xx), z(xx) {}
     Vec3(T xx, T yy, T zz) : x(xx), y(yy), z(zz) {}
 
-    Vec3<T> operator * (const T &f) const { return Vec3<T>(x * f, y * f, z * f); } 
-    Vec3<T> operator * (const Vec3<T> &v) const { return Vec3<T>(x * v.x, y * v.y, z * v.z); } 
-    Vec3<T> operator - (const Vec3<T> &v) const { return Vec3<T>(x - v.x, y - v.y, z - v.z); } 
-    Vec3<T> operator + (const Vec3<T> &v) const { return Vec3<T>(x + v.x, y + v.y, z + v.z); } 
-    Vec3<T>& operator += (const Vec3<T> &v) { x += v.x, y += v.y, z += v.z; return *this; } 
-    Vec3<T>& operator *= (const Vec3<T> &v) { x *= v.x, y *= v.y, z *= v.z; return *this; }
-    Vec3<T> operator - () const { return Vec3<T>(-x, -y, -z); } 
-
-    T dot(const Vec3<T> &v) const { return x*v.x + y*v.y + z*v.z; } 
-    T dotProduct (const Vec3& v) const { return x*v.x + y*v.y + z*v.z; }
-    Vec3 crossProduct (const Vec3& v) const { 
-        return Vec3(
-            y * v.z - z * v.y,
-            z * v.x - x * v.z,
-            x * v.y - y * v.x
-        );
+    Vec3<T>
+    operator*(const T &f) const
+    {
+        return Vec3<T>(x * f, y * f, z * f);
     }
 
-    T norm() const { return x*x + y*y + z*z; }
-    T length2() const { return x*x + y*y + z*z; } 
-    T length() const { return sqrt(norm()); }
+    Vec3<T>
+    operator*(const Vec3<T> &v) const
+    {
+        return Vec3<T>(x * v.x, y * v.y, z * v.z);
+    }
 
-    // The next two operators are sometimes called access operators or
-    // accessors. The Vec coordinates can be accessed that way v[0], v[1], v[2],
-    // rather than using the more traditional form v.x, v.y, v.z. This useful
-    // when vectors are used in loops: the coordinates can be accessed with the
-    // loop index (e.g. v[i]).
-    const T& operator [] (uint8_t i) const { return (&x)[i]; }
-    T& operator [] (uint8_t i) { return (&x)[i]; }
+    Vec3<T>
+    operator-(const Vec3<T> &v) const
+    {
+        return Vec3<T>(x - v.x, y - v.y, z - v.z);
+    }
 
-    Vec3& normalize() { 
-        T n = norm(); 
-        if (n > 0) { 
-            T factor = 1 / sqrt(n); 
-            x *= factor, y *= factor, z *= factor; 
-        } 
- 
-        return *this; 
-    } 
-    
-    friend std::ostream& operator << (std::ostream &s, const Vec3<T> &v) {
+    Vec3<T>
+    operator+(const Vec3<T> &v) const
+    {
+        return Vec3<T>(x + v.x, y + v.y, z + v.z);
+    }
+
+    Vec3<T> &
+    operator+=(const Vec3<T> &v)
+    {
+        x += v.x, y += v.y, z += v.z;
+        return *this;
+    }
+
+    Vec3<T> &
+    operator*=(const Vec3<T> &v)
+    {
+        x *= v.x, y *= v.y, z *= v.z;
+        return *this;
+    }
+
+    Vec3<T>
+    operator-() const
+    {
+        return Vec3<T>(-x, -y, -z);
+    }
+
+    T
+    dot(const Vec3<T> &v) const
+    {
+        return x * v.x + y * v.y + z * v.z;
+    }
+
+    T
+    dotProduct(const Vec3 &v) const
+    {
+        return x * v.x + y * v.y + z * v.z;
+    }
+
+    Vec3
+    crossProduct(const Vec3 &v) const
+    {
+        return Vec3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+    }
+
+    T
+    norm() const
+    {
+        return x * x + y * y + z * z;
+    }
+
+    T
+    length2() const
+    {
+        return x * x + y * y + z * z;
+    }
+
+    T
+    length() const
+    {
+        return sqrt(norm());
+    }
+
+    const T &
+    operator[](uint8_t i) const
+    {
+        return (&x)[i];
+    }
+
+    T &
+    operator[](uint8_t i)
+    {
+        return (&x)[i];
+    }
+
+    Vec3 &
+    normalize()
+    {
+        T n = norm();
+        if (n > 0)
+        {
+            T factor = 1 / sqrt(n);
+            x *= factor, y *= factor, z *= factor;
+        }
+
+        return *this;
+    }
+
+    friend std::ostream &
+    operator<<(std::ostream &s, const Vec3<T> &v)
+    {
         return s << "(" << v.x << ", " << v.y << ", " << v.z << ")";
     }
     T x, y, z;
@@ -59,112 +127,76 @@ public:
 typedef Vec3<float> Vec3f;
 typedef Vec3<int> Vec3i;
 
-// Z Axis is the Up Vector. X is right and Y is forward.
-template<typename T>
-Vec3<T> sphericalToCartesian(const T &theta, const T &phi)
+template <typename T> 
+class Matrix44
 {
-    return Vec3<T>(cos(phi)*sin(theta), sin(phi)*sin(theta), cos(theta));
-}
-
-// Angle subtended by the Up Vector ie Z Axis
-template<typename T>
-inline T sphericalTheta(const Vec3<T> &v)
-{
-    return acos(clamp<T>(v.z, -1, 1));
-}
-
-// Angle subtended by the Right Vector ie X Axis
-template<typename T>
-inline T sphericalPhi(const Vec3<T> &v)
-{
-    T p = atan2(v.y, v.x); // returned range is [-pi, pi]
-    
-    // converting this to [0, 2*pi]
-    return (p < 0) ? p + 2 * M_PHI : p;
-}
-
-// Angle subtended by the Up Vector ie Z Axis
-template<typename T>
-inline T cosTheta(const Vec3<T> &v)
-{
-    return norm.z;
-}
-
-// Angle subtended by the Up Vector ie Z Axis
-template<typename T>
-inline T sinTheta(const Vec3<T> &v)
-{
-    T cosTheta = cosTheta(v);
-    return sqrtf(1.0f - cosTheta*cosTheta);
-}
-
-// angle subtended by the right vector ie X Axis
-template<typename T>
-inline T cosPhi(const Vec3<T> &v)
-{
-    T sinTheta = sinTheta(v);
-    if(sinTheta == 0) return 1; // Phi is 0.
-    return clamp<T>(v.x / sinTheta, -1, 1);
-}
-
-// angle subtended by the up vector ie X Axis
-template<typename T>
-inline T sinPhi(const Vec3<T> &v)
-{
-    T sinTheta = sinTheta(v);
-    if(sinTheta == 0) return 1; // Phi is 0.
-    return clamp<T>(v.y / sinTheta, -1, 1);
-}
-
-template<typename T>
-class Matrix44 {
-public:
-    // initialize with an identity matrix
+  public:
     T x[4][4] = {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
-    
+
     Matrix44() {}
-    Matrix44(T a, T b, T c, T d, 
-             T e, T f, T g, T h, 
-             T i, T j, T k, T l, 
-             T m, T n, T o, T p)
+    Matrix44(T a, T b, T c, T d, T e, T f, T g, T h, T i, T j, T k, T l, T m,
+             T n, T o, T p)
     {
 #ifdef ROW_MAJOR
-        x[0][0] = a; x[0][1] = b; x[0][2] = c; x[0][3] = d;
-        x[1][0] = e; x[1][1] = f; x[1][2] = g; x[1][3] = h;
-        x[2][0] = i; x[2][1] = j; x[2][2] = k; x[2][3] = l;
-        x[3][0] = m; x[3][1] = n; x[3][2] = o; x[3][3] = p;
+        x[0][0] = a;
+        x[0][1] = b;
+        x[0][2] = c;
+        x[0][3] = d;
+        x[1][0] = e;
+        x[1][1] = f;
+        x[1][2] = g;
+        x[1][3] = h;
+        x[2][0] = i;
+        x[2][1] = j;
+        x[2][2] = k;
+        x[2][3] = l;
+        x[3][0] = m;
+        x[3][1] = n;
+        x[3][2] = o;
+        x[3][3] = p;
 #else
-        x[0][0] = a; x[1][0] = b; x[2][0] = c; x[3][0] = d;
-        x[0][1] = e; x[1][1] = f; x[2][1] = g; x[3][1] = h;
-        x[0][2] = i; x[1][2] = j; x[2][2] = k; x[3][2] = l;
-        x[0][3] = m; x[1][3] = n; x[2][3] = o; x[3][3] = p;
+        x[0][0] = a;
+        x[1][0] = b;
+        x[2][0] = c;
+        x[3][0] = d;
+        x[0][1] = e;
+        x[1][1] = f;
+        x[2][1] = g;
+        x[3][1] = h;
+        x[0][2] = i;
+        x[1][2] = j;
+        x[2][2] = k;
+        x[3][2] = l;
+        x[0][3] = m;
+        x[1][3] = n;
+        x[2][3] = o;
+        x[3][3] = p;
 #endif
     }
-    
-    const T* operator[] (uint8_t i) const { return x[i]; }
-    T* operator[] (uint8_t i) { return x[i]; }
-    
-    // Multiply the current matrix with another matrix (rhs) 
-    Matrix44 operator * (const Matrix44& v) const {
+
+    const T *
+    operator[](uint8_t i) const
+    {
+        return x[i];
+    }
+    T *
+    operator[](uint8_t i)
+    {
+        return x[i];
+    }
+
+    Matrix44
+    operator*(const Matrix44 &v) const
+    {
         Matrix44 tmp;
         multiply(*this, v, tmp);
-        
+
         return tmp;
     }
-    
-    // To make it easier to understand how a matrix multiplication works, the
-    // fragment of code included within the #if-#else statement, show how this
-    // works if you were to iterate over the coefficients of the resulting
-    // matrix (a). However you will often see this multiplication being done
-    // using the code contained within the #else-#end statement. It is exactly
-    // the same as the first fragment only we have litteraly written down as a
-    // series of operations what would actually result from executing the two
-    // for() loops contained in the first fragment. It is supposed to be faster,
-    // however considering matrix multiplicatin is not necessarily that common,
-    // this is probably not super useful nor really necessary (but nice to have
-    // -- and it gives you an example of how it can be done, as this how you
-    // will this operation implemented in most libraries).
-    static void multiply(const Matrix44<T> &a, const Matrix44<T> &b, Matrix44 &c) {
+
+    static void
+    multiply(const Matrix44<T> &a, const Matrix44<T> &b, Matrix44 &c)
+    {
 #if 0
         for (uint8_t i = 0; i < 4; ++i) { 
             for (uint8_t j = 0; j < 4; ++j) { 
@@ -172,105 +204,101 @@ public:
             } 
         }
 #else
-        // A restric qualified pointer (or reference) is basically a promise
-        // to the compiler that for the scope of the pointer, the target of the
-        // pointer will only be accessed through that pointer (and pointers
-        // copied from it.
-        const T * __restrict ap = &a.x[0][0];
-        const T * __restrict bp = &b.x[0][0];
-              T * __restrict cp = &c.x[0][0];
-        
+        const T *__restrict ap = &a.x[0][0];
+        const T *__restrict bp = &b.x[0][0];
+        T *__restrict cp       = &c.x[0][0];
+
         T a0, a1, a2, a3;
 
 #if ROW_MAJOR
-        a0 = ap[0]; 
-        a1 = ap[1]; 
-        a2 = ap[2]; 
-        a3 = ap[3]; 
- 
-        cp[0]  = a0 * bp[0]  + a1 * bp[4]  + a2 * bp[8]  + a3 * bp[12]; 
-        cp[1]  = a0 * bp[1]  + a1 * bp[5]  + a2 * bp[9]  + a3 * bp[13]; 
-        cp[2]  = a0 * bp[2]  + a1 * bp[6]  + a2 * bp[10] + a3 * bp[14]; 
-        cp[3]  = a0 * bp[3]  + a1 * bp[7]  + a2 * bp[11] + a3 * bp[15]; 
- 
-        a0 = ap[4]; 
-        a1 = ap[5]; 
-        a2 = ap[6]; 
-        a3 = ap[7]; 
- 
-        cp[4]  = a0 * bp[0]  + a1 * bp[4]  + a2 * bp[8]  + a3 * bp[12]; 
-        cp[5]  = a0 * bp[1]  + a1 * bp[5]  + a2 * bp[9]  + a3 * bp[13]; 
-        cp[6]  = a0 * bp[2]  + a1 * bp[6]  + a2 * bp[10] + a3 * bp[14]; 
-        cp[7]  = a0 * bp[3]  + a1 * bp[7]  + a2 * bp[11] + a3 * bp[15]; 
- 
-        a0 = ap[8]; 
-        a1 = ap[9]; 
-        a2 = ap[10]; 
-        a3 = ap[11]; 
- 
-        cp[8]  = a0 * bp[0]  + a1 * bp[4]  + a2 * bp[8]  + a3 * bp[12]; 
-        cp[9]  = a0 * bp[1]  + a1 * bp[5]  + a2 * bp[9]  + a3 * bp[13]; 
-        cp[10] = a0 * bp[2]  + a1 * bp[6]  + a2 * bp[10] + a3 * bp[14]; 
-        cp[11] = a0 * bp[3]  + a1 * bp[7]  + a2 * bp[11] + a3 * bp[15]; 
- 
-        a0 = ap[12]; 
-        a1 = ap[13]; 
-        a2 = ap[14]; 
-        a3 = ap[15]; 
- 
-        cp[12] = a0 * bp[0]  + a1 * bp[4]  + a2 * bp[8]  + a3 * bp[12]; 
-        cp[13] = a0 * bp[1]  + a1 * bp[5]  + a2 * bp[9]  + a3 * bp[13]; 
-        cp[14] = a0 * bp[2]  + a1 * bp[6]  + a2 * bp[10] + a3 * bp[14]; 
-        cp[15] = a0 * bp[3]  + a1 * bp[7]  + a2 * bp[11] + a3 * bp[15];
+        a0 = ap[0];
+        a1 = ap[1];
+        a2 = ap[2];
+        a3 = ap[3];
+
+        cp[0] = a0 * bp[0] + a1 * bp[4] + a2 * bp[8] + a3 * bp[12];
+        cp[1] = a0 * bp[1] + a1 * bp[5] + a2 * bp[9] + a3 * bp[13];
+        cp[2] = a0 * bp[2] + a1 * bp[6] + a2 * bp[10] + a3 * bp[14];
+        cp[3] = a0 * bp[3] + a1 * bp[7] + a2 * bp[11] + a3 * bp[15];
+
+        a0 = ap[4];
+        a1 = ap[5];
+        a2 = ap[6];
+        a3 = ap[7];
+
+        cp[4] = a0 * bp[0] + a1 * bp[4] + a2 * bp[8] + a3 * bp[12];
+        cp[5] = a0 * bp[1] + a1 * bp[5] + a2 * bp[9] + a3 * bp[13];
+        cp[6] = a0 * bp[2] + a1 * bp[6] + a2 * bp[10] + a3 * bp[14];
+        cp[7] = a0 * bp[3] + a1 * bp[7] + a2 * bp[11] + a3 * bp[15];
+
+        a0 = ap[8];
+        a1 = ap[9];
+        a2 = ap[10];
+        a3 = ap[11];
+
+        cp[8]  = a0 * bp[0] + a1 * bp[4] + a2 * bp[8] + a3 * bp[12];
+        cp[9]  = a0 * bp[1] + a1 * bp[5] + a2 * bp[9] + a3 * bp[13];
+        cp[10] = a0 * bp[2] + a1 * bp[6] + a2 * bp[10] + a3 * bp[14];
+        cp[11] = a0 * bp[3] + a1 * bp[7] + a2 * bp[11] + a3 * bp[15];
+
+        a0 = ap[12];
+        a1 = ap[13];
+        a2 = ap[14];
+        a3 = ap[15];
+
+        cp[12] = a0 * bp[0] + a1 * bp[4] + a2 * bp[8] + a3 * bp[12];
+        cp[13] = a0 * bp[1] + a1 * bp[5] + a2 * bp[9] + a3 * bp[13];
+        cp[14] = a0 * bp[2] + a1 * bp[6] + a2 * bp[10] + a3 * bp[14];
+        cp[15] = a0 * bp[3] + a1 * bp[7] + a2 * bp[11] + a3 * bp[15];
 #else
-        // Column Major
-        a0 = ap[0]; 
-        a1 = ap[4]; 
-        a2 = ap[8]; 
-        a3 = ap[12]; 
- 
-        cp[0]  = a0 * bp[0]  + a1 * bp[1]  + a2 * bp[2]  + a3 * bp[3]; 
-        cp[1]  = a0 * bp[4]  + a1 * bp[5]  + a2 * bp[6]  + a3 * bp[7]; 
-        cp[2]  = a0 * bp[8]  + a1 * bp[9]  + a2 * bp[10] + a3 * bp[11]; 
-        cp[3]  = a0 * bp[12] + a1 * bp[13] + a2 * bp[14] + a3 * bp[15]; 
- 
-        a0 = ap[1]; 
-        a1 = ap[5]; 
-        a2 = ap[9]; 
-        a3 = ap[13]; 
- 
-        cp[4]  = a0 * bp[0]  + a1 * bp[1]  + a2 * bp[2]  + a3 * bp[3]; 
-        cp[5]  = a0 * bp[4]  + a1 * bp[5]  + a2 * bp[6]  + a3 * bp[7]; 
-        cp[6]  = a0 * bp[8]  + a1 * bp[9]  + a2 * bp[10] + a3 * bp[11]; 
-        cp[7]  = a0 * bp[12] + a1 * bp[13] + a2 * bp[14] + a3 * bp[15]; 
- 
-        a0 = ap[2]; 
-        a1 = ap[6]; 
-        a2 = ap[10]; 
-        a3 = ap[14]; 
- 
-        cp[8]  = a0 * bp[0]  + a1 * bp[1]  + a2 * bp[2]  + a3 * bp[3]; 
-        cp[9]  = a0 * bp[4]  + a1 * bp[5]  + a2 * bp[6]  + a3 * bp[7]; 
-        cp[10] = a0 * bp[8]  + a1 * bp[9]  + a2 * bp[10] + a3 * bp[11]; 
-        cp[11] = a0 * bp[12] + a1 * bp[13] + a2 * bp[14] + a3 * bp[15]; 
- 
-        a0 = ap[3]; 
-        a1 = ap[7]; 
-        a2 = ap[11]; 
-        a3 = ap[15]; 
- 
-        cp[12] = a0 * bp[0]  + a1 * bp[1]  + a2 * bp[2]  + a3 * bp[3]; 
-        cp[13] = a0 * bp[4]  + a1 * bp[5]  + a2 * bp[6]  + a3 * bp[7]; 
-        cp[14] = a0 * bp[8]  + a1 * bp[9]  + a2 * bp[10] + a3 * bp[11]; 
-        cp[15] = a0 * bp[12] + a1 * bp[13] + a2 * bp[14] + a3 * bp[15]; 
+        a0 = ap[0];
+        a1 = ap[4];
+        a2 = ap[8];
+        a3 = ap[12];
+
+        cp[0] = a0 * bp[0] + a1 * bp[1] + a2 * bp[2] + a3 * bp[3];
+        cp[1] = a0 * bp[4] + a1 * bp[5] + a2 * bp[6] + a3 * bp[7];
+        cp[2] = a0 * bp[8] + a1 * bp[9] + a2 * bp[10] + a3 * bp[11];
+        cp[3] = a0 * bp[12] + a1 * bp[13] + a2 * bp[14] + a3 * bp[15];
+
+        a0 = ap[1];
+        a1 = ap[5];
+        a2 = ap[9];
+        a3 = ap[13];
+
+        cp[4] = a0 * bp[0] + a1 * bp[1] + a2 * bp[2] + a3 * bp[3];
+        cp[5] = a0 * bp[4] + a1 * bp[5] + a2 * bp[6] + a3 * bp[7];
+        cp[6] = a0 * bp[8] + a1 * bp[9] + a2 * bp[10] + a3 * bp[11];
+        cp[7] = a0 * bp[12] + a1 * bp[13] + a2 * bp[14] + a3 * bp[15];
+
+        a0 = ap[2];
+        a1 = ap[6];
+        a2 = ap[10];
+        a3 = ap[14];
+
+        cp[8]  = a0 * bp[0] + a1 * bp[1] + a2 * bp[2] + a3 * bp[3];
+        cp[9]  = a0 * bp[4] + a1 * bp[5] + a2 * bp[6] + a3 * bp[7];
+        cp[10] = a0 * bp[8] + a1 * bp[9] + a2 * bp[10] + a3 * bp[11];
+        cp[11] = a0 * bp[12] + a1 * bp[13] + a2 * bp[14] + a3 * bp[15];
+
+        a0 = ap[3];
+        a1 = ap[7];
+        a2 = ap[11];
+        a3 = ap[15];
+
+        cp[12] = a0 * bp[0] + a1 * bp[1] + a2 * bp[2] + a3 * bp[3];
+        cp[13] = a0 * bp[4] + a1 * bp[5] + a2 * bp[6] + a3 * bp[7];
+        cp[14] = a0 * bp[8] + a1 * bp[9] + a2 * bp[10] + a3 * bp[11];
+        cp[15] = a0 * bp[12] + a1 * bp[13] + a2 * bp[14] + a3 * bp[15];
 
 #endif
 
 #endif
     }
-    
-    // Returns a transposed copy of the matrix as a new matrix.
-    Matrix44 transposed() const {
+
+    Matrix44
+    transposed() const
+    {
 #if 0 
         Matrix44 t; 
         for (uint8_t i = 0; i < 4; ++i) { 
@@ -279,68 +307,50 @@ public:
             } 
         } 
  
-        return t; 
-#else 
-        return Matrix44 (
-            x[0][0], x[1][0], x[2][0], x[3][0], 
-            x[0][1], x[1][1], x[2][1], x[3][1], 
-            x[0][2], x[1][2], x[2][2], x[3][2], 
-            x[0][3], x[1][3], x[2][3], x[3][3]
-        ); 
+        return t;
+#else
+        return Matrix44(x[0][0], x[1][0], x[2][0], x[3][0], x[0][1], x[1][1],
+                        x[2][1], x[3][1], x[0][2], x[1][2], x[2][2], x[3][2],
+                        x[0][3], x[1][3], x[2][3], x[3][3]);
 #endif
     }
 
-    // Transpose itself
-    Matrix44& transpose () { 
-        Matrix44 tmp (
-            x[0][0], x[1][0], x[2][0], x[3][0], 
-            x[0][1], x[1][1], x[2][1], x[3][1], 
-            x[0][2], x[1][2], x[2][2], x[3][2], 
-            x[0][3], x[1][3], x[2][3], x[3][3]
-        ); 
-        *this = tmp; 
-        return *this; 
+    Matrix44 &
+    transpose()
+    {
+        Matrix44 tmp(x[0][0], x[1][0], x[2][0], x[3][0], x[0][1], x[1][1],
+                     x[2][1], x[3][1], x[0][2], x[1][2], x[2][2], x[3][2],
+                     x[0][3], x[1][3], x[2][3], x[3][3]);
+        *this = tmp;
+        return *this;
     }
 
-    // This method needs to be used for point-matrix multiplication. Keep in
-    // mind we don't make the distinction between points and vectors at least
-    // from a programming point of view, as both (as well as normals) are
-    // declared as Vec3. However, mathematically they need to be treated
-    // differently. Points can be translated when translation for vectors is
-    // meaningless. Furthermore, points are implicitly be considered as having
-    // homogeneous coordinates. Thus the w coordinates needs to be computed and
-    // to convert the coordinates from homogeneous back to Cartesian
-    // coordinates, we need to divided x, y z by w. The coordinate w is more
-    // often than not equals to 1, but it can be different than 1 especially
-    // when the matrix is projective matrix (perspective projection matrix).
-    template<typename S> 
-    void multVecMatrix(const Vec3<S> &src, Vec3<S> &dst) const 
-    { 
+    template <typename S>
+    void
+    multVecMatrix(const Vec3<S> &src, Vec3<S> &dst) const
+    {
         S a, b, c, w;
 
 #ifdef ROW_MAJOR
-        a = src[0] * x[0][0] + src[1] * x[1][0] + src[2] * x[2][0] + x[3][0]; 
-        b = src[0] * x[0][1] + src[1] * x[1][1] + src[2] * x[2][1] + x[3][1]; 
-        c = src[0] * x[0][2] + src[1] * x[1][2] + src[2] * x[2][2] + x[3][2]; 
-        w = src[0] * x[0][3] + src[1] * x[1][3] + src[2] * x[2][3] + x[3][3]; 
+        a = src[0] * x[0][0] + src[1] * x[1][0] + src[2] * x[2][0] + x[3][0];
+        b = src[0] * x[0][1] + src[1] * x[1][1] + src[2] * x[2][1] + x[3][1];
+        c = src[0] * x[0][2] + src[1] * x[1][2] + src[2] * x[2][2] + x[3][2];
+        w = src[0] * x[0][3] + src[1] * x[1][3] + src[2] * x[2][3] + x[3][3];
 #else
-        a = src[0] * x[0][0] + src[1] * x[0][1] + src[2] * x[0][2] + x[0][3]; 
-        b = src[0] * x[1][0] + src[1] * x[1][1] + src[2] * x[1][2] + x[1][3]; 
-        c = src[0] * x[2][0] + src[1] * x[2][1] + src[2] * x[2][2] + x[2][3]; 
-        w = src[0] * x[3][0] + src[1] * x[3][2] + src[2] * x[3][2] + x[3][3]; 
+        a = src[0] * x[0][0] + src[1] * x[0][1] + src[2] * x[0][2] + x[0][3];
+        b = src[0] * x[1][0] + src[1] * x[1][1] + src[2] * x[1][2] + x[1][3];
+        c = src[0] * x[2][0] + src[1] * x[2][1] + src[2] * x[2][2] + x[2][3];
+        w = src[0] * x[3][0] + src[1] * x[3][2] + src[2] * x[3][2] + x[3][3];
 #endif
-        
-        dst.x = a / w; 
-        dst.y = b / w; 
-        dst.z = c / w; 
-    } 
 
-    // This method needs to be used for vector-matrix multiplication. Look at the differences
-    // with the previous method (to compute a point-matrix multiplication). We don't use
-    // the coefficients in the matrix that account for translation (x[3][0], x[3][1], x[3][2])
-    // and we don't compute w.
-    template<typename S>
-    void multDirMatrix(const Vec3<S> &src, Vec3<S> &dst) const
+        dst.x = a / w;
+        dst.y = b / w;
+        dst.z = c / w;
+    }
+
+    template <typename S>
+    void
+    multDirMatrix(const Vec3<S> &src, Vec3<S> &dst) const
     {
         S a, b, c;
 
@@ -358,188 +368,121 @@ public:
         dst.z = c;
     }
 
-    // Compute the inverse of the matrix using the Gauss-Jordan (or reduced row)
-    // elimination method. We didn't explain in the lesson on Geometry how the
-    // inverse of matrix can be found. Don't worry at this point if you don't
-    // understand how this works. But we will need to be able to compute the
-    // inverse of matrices in the first lessons of the "Foundation of 3D
-    // Rendering" section, which is why we've added this code. For now, you can
-    // just use it and rely on it for doing what it's supposed to do. If you
-    // want to learn how this works though, check the lesson on called Matrix
-    // Inverse in the "Mathematics and Physics of Computer Graphics" section.
     Matrix44
     inverse()
     {
-        int i, j, k;
         Matrix44 s;
         Matrix44 t(*this);
-        
-        // Forward elimination
-        for (i = 0; i < 3; i++)
+
+        for (uint32_t i = 0; i < 3; i++)
         {
-            int pivot = i;
+
+            uint32_t pivot = i;
             
-            T pivotsize = t[i][i];
-            
+            float pivotsize = t[i][i];
+
             if (pivotsize < 0)
                 pivotsize = -pivotsize;
-            
-            for (j = i + 1; j < 4; j++)
+
+            for (uint32_t j = i + 1; j < 4; j++)
             {
-                T tmp = t[j][i];
-                
+                float tmp = t[j][i];
+
                 if (tmp < 0)
                     tmp = -tmp;
-                
+
                 if (tmp > pivotsize)
                 {
                     pivot     = j;
                     pivotsize = tmp;
                 }
             }
-            
+
             if (pivotsize == 0)
             {
-                // Cannot invert singular matrix
                 return Matrix44();
             }
-            
+
             if (pivot != i)
             {
-                for (j = 0; j < 4; j++)
+                for (uint32_t j = 0; j < 4; j++)
                 {
-                    T tmp;
-                    
+                    float tmp;
+
                     tmp         = t[i][j];
                     t[i][j]     = t[pivot][j];
                     t[pivot][j] = tmp;
-                    
+
                     tmp         = s[i][j];
                     s[i][j]     = s[pivot][j];
                     s[pivot][j] = tmp;
                 }
             }
-            
-            for (j = i + 1; j < 4; j++)
+
+            for (uint32_t j = i + 1; j < 4; j++)
             {
-                T f = t[j][i] / t[i][i];
-                
-                for (k = 0; k < 4; k++)
+                float f = t[j][i] / t[i][i];
+
+                for (uint32_t k = 0; k < 4; k++)
                 {
                     t[j][k] -= f * t[i][k];
                     s[j][k] -= f * s[i][k];
                 }
+                t[j][i] = 0.f;
             }
         }
-        
-        // Backward substitution
-        for (i = 3; i >= 0; --i)
+
+        for (uint32_t i = 0; i < 4; i++)
         {
-            T f;
-            
-            if ((f = t[i][i]) == 0)
+            float divisor = t[i][i];
+            for (uint32_t j = 0; j < 4; j++)
             {
-                // Cannot invert singular matrix
-                return Matrix44();
+                t[i][j] = t[i][j] / divisor;
+                s[i][j] = s[i][j] / divisor;
             }
-            
-            for (j = 0; j < 4; j++)
+            t[i][i] = 1.f;
+        }
+
+        for (uint32_t i = 0; i < 3; i++)
+        {
+            for (uint32_t j = i + 1; j < 4; j++)
             {
-                t[i][j] /= f;
-                s[i][j] /= f;
-            }
-            
-            for (j = 0; j < i; j++)
-            {
-                f = t[j][i];
-                
-                for (k = 0; k < 4; k++)
+                float constant = t[i][j];
+                for (uint32_t k = 0; k < 4; k++)
                 {
-                    t[j][k] -= f * t[i][k];
-                    s[j][k] -= f * s[i][k];
+                    t[i][k] -= t[j][k] * constant;
+                    s[i][k] -= s[j][k] * constant;
                 }
+                t[i][j] = 0.f;
             }
         }
-        
+
         return s;
     }
-
-    Matrix44
-    inverse_attempt()
-    {
-        Matrix44 inv;
-        Matrix44 t(*this);
-
-        // NOTE: First Column
-        // we will first start with making the first element 1.
-        for(int column = 0; column < 4; ++column)
-        {
-            T pivot = t[column][column];
-            if (pivot == 0)
-            {
-                // TODO(mani): Basically check other rows to make sure the pivot is 1.
-            }
-
-            if(pivot != 1)
-            {
-                for(int i = 0; i < 4; ++i)
-                {
-                    t[column][i] /= pivot;
-                    inv[column][i] /= pivot;
-                }
-            }
-            
-            for(int row = 0; row < 4; ++row)
-            {
-                if(row != column)
-                {
-                    T tmp = t[row][column];
-                    
-                    for(int i = 0; i < 4; ++i)
-                    {
-                        t[row][i] = t[row][i] - tmp*t[column][i];
-                        inv[row][i] = inv[row][i] - tmp*inv[column][i]; 
-                    }
-                }
-            }
-        }
-
-        return inv;
-    }
     
-    T
-    determinant33(T d00, T d01, T d02,
-                  T d10, T d11, T d12,
-                  T d20, T d21, T d22)
-    {
-        return ((d00*((d11*d22)-(d21*d12))) - 
-                (d01*((d10*d22)-(d20*d12))) + 
-                (d02*((d10*d21)-(d20*d11))));
-    }
-
     T
     determinant()
     {
         T det{0};
         Matrix44 m = *this;
 
-        for(int i = 0; i < 4; ++i)
+        for (int i = 0; i < 4; ++i)
         {
             T mult = 1;
-            if(i & 0x1) mult = -1;
+            if (i & 0x1) mult = -1;
 
-            int cx = 0;
+            int cx       = 0;
             int index[3] = {};
-            for(int j = 0; j < 4; ++j)
+            for (int j = 0; j < 4; ++j)
             {
-                if(i == j) continue;
+                if (i == j) continue;
                 index[cx++] = j;
             }
 
             T d00 = m[1][index[0]];
             T d01 = m[1][index[1]];
             T d02 = m[1][index[2]];
-            
+
             T d10 = m[2][index[0]];
             T d11 = m[2][index[1]];
             T d12 = m[2][index[2]];
@@ -548,53 +491,122 @@ public:
             T d21 = m[3][index[1]];
             T d22 = m[3][index[2]];
 
-            det += mult * m[0][i] * determinant33(d00, d01, d02,
-                                                  d10, d11, d12,
-                                                  d20, d21, d22);
+            det += mult * m[0][i] *
+                   determinant33(d00, d01, d02, d10, d11, d12, d20, d21, d22);
         }
-        
-        return det;                                                                              
+
+        return det;
     }
 
-    // \brief set current matrix to its inverse
-    const Matrix44<T>& invert() 
-    { 
-        *this = inverse_attempt(); 
-        return *this; 
-    } 
- 
-    friend std::ostream& operator << (std::ostream &s, const Matrix44 &m) 
-    { 
-        std::ios_base::fmtflags oldFlags = s.flags(); 
-        int width = 12;  //total with of the displayed number 
-        s.precision(5);  //control the number of displayed decimals 
-        s.setf (std::ios_base::fixed); 
- 
-        s << "(" << std::setw (width) << m[0][0] << 
-             " " << std::setw (width) << m[0][1] << 
-             " " << std::setw (width) << m[0][2] << 
-             " " << std::setw (width) << m[0][3] << "\n" << 
- 
-             " " << std::setw (width) << m[1][0] << 
-             " " << std::setw (width) << m[1][1] << 
-             " " << std::setw (width) << m[1][2] << 
-             " " << std::setw (width) << m[1][3] << "\n" << 
- 
-             " " << std::setw (width) << m[2][0] << 
-             " " << std::setw (width) << m[2][1] << 
-             " " << std::setw (width) << m[2][2] << 
-             " " << std::setw (width) << m[2][3] << "\n" << 
- 
-             " " << std::setw (width) << m[3][0] << 
-             " " << std::setw (width) << m[3][1] << 
-             " " << std::setw (width) << m[3][2] << 
-             " " << std::setw (width) << m[3][3] << ")\n"; 
- 
-        s.flags (oldFlags); 
-        return s; 
-    } 
-}; 
+    const Matrix44<T> &
+    invert()
+    {
+        *this = inverse();
+        return *this;
+    }
+
+    friend std::ostream &
+    operator<<(std::ostream &s, const Matrix44 &m)
+    {
+        std::ios_base::fmtflags oldFlags = s.flags();
+        int width = 12;
+        s.precision(5);
+        s.setf(std::ios_base::fixed);
+
+        s << "(" << std::setw(width) << m[0][0] << " " << std::setw(width)
+          << m[0][1] << " " << std::setw(width) << m[0][2] << " "
+          << std::setw(width) << m[0][3] << "\n"
+          <<
+
+            " " << std::setw(width) << m[1][0] << " " << std::setw(width)
+          << m[1][1] << " " << std::setw(width) << m[1][2] << " "
+          << std::setw(width) << m[1][3] << "\n"
+          <<
+
+            " " << std::setw(width) << m[2][0] << " " << std::setw(width)
+          << m[2][1] << " " << std::setw(width) << m[2][2] << " "
+          << std::setw(width) << m[2][3] << "\n"
+          <<
+
+            " " << std::setw(width) << m[3][0] << " " << std::setw(width)
+          << m[3][1] << " " << std::setw(width) << m[3][2] << " "
+          << std::setw(width) << m[3][3] << ")\n";
+
+        s.flags(oldFlags);
+        return s;
+    }
+
+  private:
+    T 
+    determinant33(T d00, T d01, T d02, 
+                  T d10, T d11, T d12,
+                  T d20, T d21, T d22)
+    {
+        return ((d00 * ((d11 * d22) - (d21 * d12))) -
+                (d01 * ((d10 * d22) - (d20 * d12))) +
+                (d02 * ((d10 * d21) - (d20 * d11))));
+    }
+};
 
 typedef Matrix44<float> Matrix44f;
 
+template<typename T> 
+class SphericalCoord
+{
+  public:
+    // Spherical Coordinates.    
+    static Vec3<T>
+    sphericalToCartesian(const T &theta, const T &phi)
+    {
+        return Vec3<T>(cos(phi) * sin(theta), sin(phi) * sin(theta),
+                       cos(theta));
+    }
+    
+    static inline T
+    sphericalTheta(const Vec3<T> &v)
+    {
+        return acos(clamp<T>(v.z, -1, 1));
+    }
+    
+    static inline T
+    sphericalPhi(const Vec3<T> &v)
+    {
+        T p = atan2(v.y, v.x);
 
+        return (p < 0) ? p + 2 * M_PHI : p;
+    }
+    
+    static inline T
+    cosTheta(const Vec3<T> &v)
+    {
+        return norm.z;
+    }
+    
+    static inline T
+    sinTheta(const Vec3<T> &v)
+    {
+        T cosTheta = cosTheta(v);
+        return sqrtf(1.0f - cosTheta * cosTheta);
+    }
+
+    
+    static inline T
+    cosPhi(const Vec3<T> &v)
+    {
+        T sinTheta = sinTheta(v);
+        if (sinTheta == 0)
+            return 1;
+        return clamp<T>(v.x / sinTheta, -1, 1);
+    }
+    
+    static inline T
+    sinPhi(const Vec3<T> &v)
+    {
+        T sinTheta = sinTheta(v);
+        if (sinTheta == 0)
+            return 1;
+        return clamp<T>(v.y / sinTheta, -1, 1);
+    }
+};
+
+#endif

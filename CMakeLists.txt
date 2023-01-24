@@ -28,6 +28,9 @@ find_package(OpenGL REQUIRED)
 include_directories(common)
 add_subdirectory(common)
 
-add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.Geometry)
+add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.01.Geometry)
+add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.03.Interpolation)
+
+
 add_subdirectory(src/Chapter02.3D_Rendering_For_Beginners/02.1.IntroToRayTracing)
 add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/02.matrix.inverse.gauss.jordan.method)
