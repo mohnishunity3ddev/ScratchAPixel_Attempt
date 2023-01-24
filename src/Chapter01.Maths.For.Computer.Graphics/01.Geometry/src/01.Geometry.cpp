@@ -29,7 +29,7 @@ int main() {
         std::cout << "myFloat[" << i << "] = " << myFloat[i] << " before modification.\n";
         myFloat[i] = 0;
     }
-
+    
     std::cout << "myFloat = " << myFloat << "\n";
 
     f.normalize();
@@ -48,12 +48,19 @@ int main() {
     d.invert(); 
     std::cerr << d << std::endl; 
 
-    Matrix44f invEx(1, 2, 3, 4, 
-                    5, 6, 7, 8, 
-                    9, 10, 11, 12, 
-                    13, 14, 15, 16);
+    Matrix44f invEx( 1,  1,  3,  0, 
+                     1,  3, -3,  0, 
+                    -2, -4, -4,  0, 
+                     0,  0,  0,  1);
     invEx.invert();
     std::cout << invEx << std::endl;
+
+    Matrix44f invEx2( 1,  1,  1, -1, 
+                      1,  1, -1,  1, 
+                      1, -1,  1,  1, 
+                     -1,  1,  1,  1);
+    invEx2.invert();
+    std::cout << invEx2 << std::endl;
  
     return 0;                                                                 
 }

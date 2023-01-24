@@ -11,6 +11,7 @@
     "files.associations": {
         "cmath": "cpp",
         "iomanip": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "iostream": "cpp"
     }
 }
