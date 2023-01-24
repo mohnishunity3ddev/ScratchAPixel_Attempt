@@ -47,6 +47,13 @@ int main() {
     std::cerr << d << std::endl; 
     d.invert(); 
     std::cerr << d << std::endl; 
+
+    Matrix44f invEx(1, 2, 3, 4, 
+                    5, 6, 7, 8, 
+                    9, 10, 11, 12, 
+                    13, 14, 15, 16);
+    invEx.invert();
+    std::cout << invEx << std::endl;
  
     return 0;                                                                 
 }

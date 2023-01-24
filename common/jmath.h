@@ -367,89 +367,103 @@ public:
     // just use it and rely on it for doing what it's supposed to do. If you
     // want to learn how this works though, check the lesson on called Matrix
     // Inverse in the "Mathematics and Physics of Computer Graphics" section.
-    Matrix44 inverse() 
-    { 
-        int i, j, k; 
-        Matrix44 s; 
-        Matrix44 t (*this); 
- 
+    Matrix44
+    inverse()
+    {
+        int i, j, k;
+        Matrix44 s;
+        Matrix44 t(*this);
+
         // Forward elimination
-        for (i = 0; i < 3 ; i++) { 
-            int pivot = i; 
- 
-            T pivotsize = t[i][i]; 
- 
-            if (pivotsize < 0) 
-                pivotsize = -pivotsize; 
- 
-                for (j = i + 1; j < 4; j++) { 
-                    T tmp = t[j][i]; 
- 
-                    if (tmp < 0) 
-                        tmp = -tmp; 
- 
-                        if (tmp > pivotsize) { 
-                            pivot = j; 
-                            pivotsize = tmp; 
-                        } 
-                } 
- 
-            if (pivotsize == 0) { 
+        for (i = 0; i < 3; i++)
+        {
+            int pivot = i;
+
+            T pivotsize = t[i][i];
+
+            if (pivotsize < 0)
+                pivotsize = -pivotsize;
+
+            for (j = i + 1; j < 4; j++)
+            {
+                T tmp = t[j][i];
+
+                if (tmp < 0)
+                    tmp = -tmp;
+
+                if (tmp > pivotsize)
+                {
+                    pivot     = j;
+                    pivotsize = tmp;
+                }
+            }
+
+            if (pivotsize == 0)
+            {
                 // Cannot invert singular matrix
-                return Matrix44(); 
-            } 
- 
-            if (pivot != i) { 
-                for (j = 0; j < 4; j++) { 
-                    T tmp; 
- 
-                    tmp = t[i][j]; 
-                    t[i][j] = t[pivot][j]; 
-                    t[pivot][j] = tmp; 
- 
-                    tmp = s[i][j]; 
-                    s[i][j] = s[pivot][j]; 
-                    s[pivot][j] = tmp; 
-                } 
-            } 
- 
-            for (j = i + 1; j < 4; j++) { 
-                T f = t[j][i] / t[i][i]; 
- 
-                for (k = 0; k < 4; k++) { 
-                    t[j][k] -= f * t[i][k]; 
-                    s[j][k] -= f * s[i][k]; 
-                } 
-            } 
-        } 
- 
+                return Matrix44();
+            }
+
+            if (pivot != i)
+            {
+                for (j = 0; j < 4; j++)
+                {
+                    T tmp;
+
+                    tmp         = t[i][j];
+                    t[i][j]     = t[pivot][j];
+                    t[pivot][j] = tmp;
+
+                    tmp         = s[i][j];
+                    s[i][j]     = s[pivot][j];
+                    s[pivot][j] = tmp;
+                }
+            }
+
+            for (j = i + 1; j < 4; j++)
+            {
+                T f = t[j][i] / t[i][i];
+
+                for (k = 0; k < 4; k++)
+                {
+                    t[j][k] -= f * t[i][k];
+                    s[j][k] -= f * s[i][k];
+                }
+            }
+        }
+
         // Backward substitution
-        for (i = 3; i >= 0; --i) { 
-            T f; 
- 
-            if ((f = t[i][i]) == 0) { 
+        for (i = 3; i >= 0; --i)
+        {
+            T f;
+
+            if ((f = t[i][i]) == 0)
+            {
                 // Cannot invert singular matrix
-                return Matrix44(); 
-            } 
- 
-            for (j = 0; j < 4; j++) { 
-                t[i][j] /= f; 
-                s[i][j] /= f; 
-            } 
- 
-            for (j = 0; j < i; j++) { 
-                f = t[j][i]; 
- 
-                for (k = 0; k < 4; k++) { 
-                    t[j][k] -= f * t[i][k]; 
-                    s[j][k] -= f * s[i][k]; 
-                } 
-            } 
-        } 
- 
-        return s; 
-    } 
- 
+                return Matrix44();
+            }
+
+            for (j = 0; j < 4; j++)
+            {
+                t[i][j] /= f;
+                s[i][j] /= f;
+            }
+
+            for (j = 0; j < i; j++)
+            {
+                f = t[j][i];
+
+                for (k = 0; k < 4; k++)
+                {
+                    t[j][k] -= f * t[i][k];
+                    s[j][k] -= f * s[i][k];
+                }
+            }
+        }
+
+        return s;
+    }
+
     // \brief set current matrix to its inverse
     const Matrix44<T>& invert() 
     { 
