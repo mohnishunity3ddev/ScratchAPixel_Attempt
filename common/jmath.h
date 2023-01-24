@@ -470,11 +470,6 @@ public:
         Matrix44 inv;
         Matrix44 t(*this);
 
-        for(int column = 0; column < 4; ++column)
-        {
-            
-        }
-        
         // NOTE: First Column
         // we will first start with making the first element 1.
         for(int column = 0; column < 4; ++column)
@@ -511,12 +506,56 @@ public:
 
         return inv;
     }
-
-    T determinant()
-    {
-
-    }
     
+    T
+    determinant33(T d00, T d01, T d02,
+                  T d10, T d11, T d12,
+                  T d20, T d21, T d22)
+    {
+        return ((d00*((d11*d22)-(d21*d12))) - 
+                (d01*((d10*d22)-(d20*d12))) + 
+                (d02*((d10*d21)-(d20*d11))));
+    }
+
+    T
+    determinant()
+    {
+        T det{0};
+        Matrix44 m = *this;
+
+        for(int i = 0; i < 4; ++i)
+        {
+            T mult = 1;
+            if(i & 0x1) mult = -1;
+
+            int cx = 0;
+            int index[3] = {};
+            for(int j = 0; j < 4; ++j)
+            {
+                if(i == j) continue;
+                index[cx++] = j;
+            }
+
+            T d00 = m[1][index[0]];
+            T d01 = m[1][index[1]];
+            T d02 = m[1][index[2]];
+            
+            T d10 = m[2][index[0]];
+            T d11 = m[2][index[1]];
+            T d12 = m[2][index[2]];
+
+            T d20 = m[3][index[0]];
+            T d21 = m[3][index[1]];
+            T d22 = m[3][index[2]];
+
+            det += mult * m[0][i] * determinant33(d00, d01, d02,
+                                                  d10, d11, d12,
+                                                  d20, d21, d22);
+        }
+        
+        return det;                                                                              
+    }
+
     // \brief set current matrix to its inverse
     const Matrix44<T>& invert() 
     { 

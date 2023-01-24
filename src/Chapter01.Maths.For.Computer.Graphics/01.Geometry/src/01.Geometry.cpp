@@ -59,8 +59,23 @@ int main() {
                       1,  1, -1,  1, 
                       1, -1,  1,  1, 
                      -1,  1,  1,  1);
-    invEx2.invert();
-    std::cout << invEx2 << std::endl;
+    
+    float determinant = invEx2.determinant();
+    std::cout << "determinant is " << determinant << std::endl;
+
+    Matrix44f invEx3( 4,  3,  2,  2, 
+                      0,  1, -3,  3, 
+                      0, -1,  3,  3, 
+                      0,  3,  1,  1);
+    determinant = invEx3.determinant();
+    std::cout << "determinant is " << determinant << std::endl;
+
+    Matrix44f invEx4( 1,  2,  3,  4, 
+                      2,  5,  7,  3, 
+                      4, 10, 14,  6, 
+                      3,  4,  2,  7);
+    determinant = invEx4.determinant();
+    std::cout << "determinant is " << determinant << std::endl;
  
     return 0;                                                                 
 }
