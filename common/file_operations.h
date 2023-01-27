@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstdio>
+#include "jmath.h"
 
 struct read_result
 {
@@ -137,11 +138,47 @@ JReadFileC(const char *Filename)
 }
 
 static void
+WritePPMImage(const char *OutputFilename, 
+              void *ImageBuffer,
+              const Vec3ui &ImageDimensions)
+{
+    if(!ImageBuffer)
+    {
+        std::cout << "Image Buffer Provided is Not Valid!\n";
+        return;
+    }
+
+    if(!OutputFilename)
+    {
+        std::cout << "Invalid Output Filename provided.\n";
+        return;
+    }
+    
+    uint8_t *__restrict Image = (uint8_t *)ImageBuffer;
+    std::ofstream ofs(OutputFilename, std::ios::out | std::ios::binary);
+    
+    ofs << "P6\n" << ImageDimensions.x << " " << ImageDimensions.y << "\n255\n";
+    for(uint32_t i = 0; i < ImageDimensions.y; ++i)
+    {
+        for(uint32_t j = 0; j < ImageDimensions.x; ++j)
+        {
+            uint8_t Red   = *Image++;
+            uint8_t Green = *Image++;
+            uint8_t Blue  = *Image++;
+
+            ofs << Red << Green << Blue;
+        }
+    }
+
+    ofs.close(); 
+}
+
+static void
 WriteTestPPMFile(uint32_t width, uint32_t height)
 {
     std::ofstream ofs("test_ppm.ppm", std::ios::out | std::ios::binary);
     unsigned char max = 0xff;
-
+    
     ofs << "P6\n" << width << " " << height << "\n255\n";
     for (unsigned i = 0; i < height; ++i)
     {
