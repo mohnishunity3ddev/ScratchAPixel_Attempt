@@ -18,7 +18,7 @@ int main() {
 
     Vec3f xAxis{ 1, 0, 0 };
     Vec3f yAxis{ 0, 1, 0 };
-    Vec3f crossResult = yAxis.crossProduct(xAxis);
+    Vec3f crossResult = yAxis.cross(xAxis);
 
     std::cout << yAxis << " cross " << xAxis << " is: " << crossResult << "\n";
 

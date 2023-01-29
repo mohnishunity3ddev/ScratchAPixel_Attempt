@@ -120,7 +120,7 @@ MakeGrid(void *ImageBuffer, Vec3ui &ImageDimensions,
 int
 main()
 {
-    srand(1873);
+    srand(12345678);
     // 24 bits to represent a color.
     uint64_t RequiredSize = 3*(Width * Height); 
     void *ImageBuffer = 0;
@@ -137,7 +137,7 @@ main()
     
     MakeGrid(ImageBuffer, ImageDimensions, 5, 5);
     
-    WritePPMImage("test_bilinear.ppm", ImageBuffer, ImageDimensions);
+    WritePPMImage("../assets/test_bilinear.ppm", ImageBuffer, ImageDimensions);
     
     Free(ImageBuffer);
     return 0;

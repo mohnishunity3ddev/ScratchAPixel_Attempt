@@ -34,3 +34,5 @@ add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.03.Interpolation)
 
 add_subdirectory(src/Chapter02.3D_Rendering_For_Beginners/02.1.IntroToRayTracing)
 add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.02.matrix.inverse.gauss.jordan.method)
+
+add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.04.camera.lookAt.function)
