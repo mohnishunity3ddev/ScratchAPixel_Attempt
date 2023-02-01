@@ -3,6 +3,11 @@
 
 #include <iomanip>
 
+constexpr float rad2deg(float radians)
+{
+    return (180.0f / 3.14159f) * radians;
+}
+
 template <typename T> 
 class Vec3
 {
@@ -114,6 +119,19 @@ class Vec3
         }
 
         return *this;
+    }
+
+    void
+    normalized(Vec3 &out)
+    {
+        T n = norm();
+        if(n > 0)
+        {
+            T factor = 1 / sqrt(n);
+            out.x = x * factor;
+            out.y = y * factor;
+            out.z = z * factor;
+        }
     }
 
     friend std::ostream &
@@ -555,6 +573,27 @@ template<typename T>
 class SphericalCoord
 {
   public:
+    T theta, phi, radius;
+
+    SphericalCoord() = default;
+
+    friend std::ostream &
+    operator<<(std::ostream &s, const SphericalCoord<T> &sph)
+    {
+        return s << "(radius, theta, phi): "
+                 << "(" << sph.radius << ", " << rad2deg(sph.theta) << ", " << rad2deg(sph.phi) << ")";
+    }
+    
+    // NOTE: Y-axis is the up vector here.
+    static void
+    cartesianToSpherical(const Vec3<T> &cartesian, SphericalCoord *outSphereCoord)
+    {
+        T r = cartesian.length();
+        outSphereCoord->radius = r;
+        outSphereCoord->theta = acos(cartesian.y / r);
+        outSphereCoord->phi = atan2(cartesian.z, cartesian.x);
+    }
+
     // Spherical Coordinates.    
     static Vec3<T>
     sphericalToCartesian(const T &theta, const T &phi)
@@ -609,5 +648,7 @@ class SphericalCoord
         return clamp<T>(v.y / sinTheta, -1, 1);
     }
 };
+
+typedef SphericalCoord<float> SphericalCoordf;
 
 #endif

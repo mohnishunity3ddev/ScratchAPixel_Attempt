@@ -9,7 +9,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${fileDirname}/../bin/${fileBasenameNoExtension}_Debug.exe",
-            "args": [],
+            "args": ["0", "5", "100"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}/../bin",
             "environment": [],
