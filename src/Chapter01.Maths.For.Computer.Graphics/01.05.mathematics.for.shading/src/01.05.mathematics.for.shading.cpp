@@ -22,7 +22,6 @@ main(int argc, char **argv)
     // Vec3f cartesianCoords(1, 2, 3);
     // SphericalCoordf sphereCoords{};
     // SphericalCoordf::cartesianToSpherical(cartesianCoords, &sphereCoords);
-
     // std::cout << "sphereCoords: " << sphereCoords << std::endl;
 
     float a = atof(argv[1]);
@@ -42,6 +41,7 @@ main(int argc, char **argv)
         sum += delta_d;
         time += dt;
     }
+    
     printf("Result, exact %f, approximation %f, diff %f\n", exact, sum,
            sum - exact);
 
