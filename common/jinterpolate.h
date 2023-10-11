@@ -32,9 +32,9 @@ bilinear(const float &tx, const float &ty,
     Vec3f c01 {(float)CellColors.C01.x, (float)CellColors.C01.y, (float)CellColors.C01.z};
     Vec3f c11 {(float)CellColors.C11.x, (float)CellColors.C11.y, (float)CellColors.C11.z};
 #if 1
-    Vec3f a = c00 * (1.0f - tx) + c10 * tx;
-    Vec3f b = c01 * (1.0f - tx) + c11 * tx;
-    return a * (1.0f - ty) + b * (ty);
+    Vec3f a = c00*(1.0f - tx) + c10*tx;
+    Vec3f b = c01*(1.0f - tx) + c11*tx;
+    return a*(1.0f - ty) + b*(ty);
 #else
 #endif
 }

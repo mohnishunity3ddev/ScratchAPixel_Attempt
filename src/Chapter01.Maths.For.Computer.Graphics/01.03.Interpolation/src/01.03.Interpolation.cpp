@@ -68,6 +68,7 @@ void
 MakeGrid(void *ImageBuffer, Vec3ui &ImageDimensions, 
          const uint32_t GridSizeX, const uint32_t GridSizeY)
 {
+    
     uint32_t ImageWidth = ImageDimensions.x;
     uint32_t ImageHeight = ImageDimensions.y;
     
@@ -77,16 +78,17 @@ MakeGrid(void *ImageBuffer, Vec3ui &ImageDimensions,
     uint8_t *Image = (uint8_t *) ImageBuffer;
     uint8_t *Row = Image;
     
-    Vec3ui GridColors[GridSizeY][GridSizeX];
+    // Vec3ui GridColors[GridSizeY][GridSizeX];
+    Vec3ui GridColors[GridSizeX][GridSizeY];
     GenerateGridColors(&GridColors[0][0], GridSizeX, GridSizeY);
-
+    
     for(uint32_t i = 0; i < GridSizeY; ++i)
     {
         for (uint32_t j = 0; j < GridSizeX; ++j)
         {
             uint32_t MinX = j*CellWidth;
             uint8_t *CellTop = Row + 3*MinX;
-
+            
             uint32_t MaxX = MinX + CellWidth;
             if(MaxX >= ImageWidth)
             {
@@ -100,7 +102,7 @@ MakeGrid(void *ImageBuffer, Vec3ui &ImageDimensions,
             }
             uint32_t CWidth = MaxX - MinX;
             uint32_t CHeight = MaxY - MinY;
-
+            
             uint32 PreviousColorIndex = i == 0 ? GridSizeY - 1 : i - 1;
             
             cell_colors CellColors = {
@@ -125,7 +127,7 @@ main()
     uint64_t RequiredSize = 3*(Width * Height); 
     void *ImageBuffer = 0;
     ImageBuffer = Alloc(RequiredSize);
-
+    
     
     if(!ImageBuffer)
     {

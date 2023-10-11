@@ -37,11 +37,11 @@ class Camera
     
         Up = Forward.cross(Right);
         Up.normalize();
-
-        m[0][0] = Right.x; m[0][1] = Right.y; m[0][2] = Right.z; m[0][3] = 0.0f;
-        m[1][0] = Up.x; m[1][1] = Up.y; m[1][2] = Up.z; m[1][3] = 0.0f;
-        m[2][0] = Forward.x; m[2][1] = Forward.y; m[2][2] = Forward.z; m[2][3] = 0.0f;
-        m[3][0] = from.x; m[3][1] = from.y; m[3][2] = from.z; m[3][3] = 1.0f;
+        
+        m[0][0] = Right.x;    m[0][1] = Right.y;    m[0][2] = Right.z;    m[0][3] = 0.0f;
+        m[1][0] = Up.x;       m[1][1] = Up.y;       m[1][2] = Up.z;       m[1][3] = 0.0f;
+        m[2][0] = Forward.x;  m[2][1] = Forward.y;  m[2][2] = Forward.z;  m[2][3] = 0.0f;
+        m[3][0] = from.x;     m[3][1] = from.y;     m[3][2] = from.z;     m[3][3] = 1.0f;
     }
   
   private:

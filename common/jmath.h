@@ -3,6 +3,10 @@
 
 #include <iomanip>
 
+#if _MSC_VER
+#define M_PHI 0
+#endif
+
 constexpr float rad2deg(float radians)
 {
     return (180.0f / 3.14159f) * radians;
@@ -15,69 +19,69 @@ class Vec3
     Vec3() : x(T(0)), y(T(0)), z(T(0)) {}
     Vec3(const T &xx) : x(xx), y(xx), z(xx) {}
     Vec3(T xx, T yy, T zz) : x(xx), y(yy), z(zz) {}
-
+    
     Vec3<T>
     operator*(const T &f) const
     {
         return Vec3<T>(x * f, y * f, z * f);
     }
-
+    
     Vec3<T>
     operator*(const Vec3<T> &v) const
     {
         return Vec3<T>(x * v.x, y * v.y, z * v.z);
     }
-
+    
     Vec3<T>
     operator-(const Vec3<T> &v) const
     {
         return Vec3<T>(x - v.x, y - v.y, z - v.z);
     }
-
+    
     Vec3<T>
     operator+(const Vec3<T> &v) const
     {
         return Vec3<T>(x + v.x, y + v.y, z + v.z);
     }
-
+    
     Vec3<T> &
     operator+=(const Vec3<T> &v)
     {
         x += v.x, y += v.y, z += v.z;
         return *this;
     }
-
+    
     Vec3<T> &
     operator*=(const Vec3<T> &v)
     {
         x *= v.x, y *= v.y, z *= v.z;
         return *this;
     }
-
+    
     Vec3<T>
     operator-() const
     {
         return Vec3<T>(-x, -y, -z);
     }
-
+    
     T
     dot(const Vec3<T> &v) const
     {
         return x * v.x + y * v.y + z * v.z;
     }
-
+    
     T
     dotProduct(const Vec3 &v) const
     {
         return x * v.x + y * v.y + z * v.z;
     }
-
+    
     Vec3
     cross(const Vec3 &v) const
     {
         return Vec3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
-
+    
     T
     norm() const
     {
@@ -550,11 +554,11 @@ class Matrix44
             " " << std::setw(width) << m[3][0] << " " << std::setw(width)
           << m[3][1] << " " << std::setw(width) << m[3][2] << " "
           << std::setw(width) << m[3][3] << ")\n";
-
+        
         s.flags(oldFlags);
         return s;
     }
-
+  
   private:
     T 
     determinant33(T d00, T d01, T d02, 
@@ -574,9 +578,9 @@ class SphericalCoord
 {
   public:
     T theta, phi, radius;
-
+    
     SphericalCoord() = default;
-
+    
     friend std::ostream &
     operator<<(std::ostream &s, const SphericalCoord<T> &sph)
     {
@@ -593,7 +597,7 @@ class SphericalCoord
         outSphereCoord->theta = acos(cartesian.y / r);
         outSphereCoord->phi = atan2(cartesian.z, cartesian.x);
     }
-
+    
     // Spherical Coordinates.    
     static Vec3<T>
     sphericalToCartesian(const T &theta, const T &phi)
@@ -612,14 +616,14 @@ class SphericalCoord
     sphericalPhi(const Vec3<T> &v)
     {
         T p = atan2(v.y, v.x);
-
+        
         return (p < 0) ? p + 2 * M_PHI : p;
     }
     
     static inline T
     cosTheta(const Vec3<T> &v)
     {
-        return norm.z;
+        return 0; //norm.z;
     }
     
     static inline T
@@ -628,7 +632,7 @@ class SphericalCoord
         T cosTheta = cosTheta(v);
         return sqrtf(1.0f - cosTheta * cosTheta);
     }
-
+    
     
     static inline T
     cosPhi(const Vec3<T> &v)
