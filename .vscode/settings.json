@@ -3,11 +3,21 @@
     "editor.fontFamily": "'CaskaydiaCove NF Mono'",
     "editor.fontLigatures": true,
     "editor.fontWeight": "normal",
-    "terminal.integrated.shellArgs.windows": [
-        "-NoExit",
-        "-Command",
-        "${workspaceFolder}/build_scripts/windows/set_aliases.ps1"
-    ],
+    
+    "terminal.integrated.profiles.windows": {
+        "Default Profile": {
+            "path": [
+                "C:\\Users\\h33t9\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe"
+            ],
+            "args": [
+                "-NoExit",
+                "-Command",
+                "${workspaceFolder}/build_scripts/windows/set_aliases.ps1"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Default Profile",
+
     "files.associations": {
         "cmath": "cpp",
         "iomanip": "cpp",
