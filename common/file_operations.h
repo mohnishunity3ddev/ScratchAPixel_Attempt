@@ -169,7 +169,7 @@ WritePPMImage(const char *OutputFilename,
             ofs << Red << Green << Blue;
         }
     }
-
+    
     ofs.close(); 
 }
 
