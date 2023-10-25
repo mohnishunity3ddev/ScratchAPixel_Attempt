@@ -39,7 +39,7 @@ add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.05.mathematics.for
 add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.06.scratch)
 
 add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.07.monte-carlo)
-
 add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.08.inverse-transform-sampling)
 
 add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.09.monte-carlo-simulation)
+
