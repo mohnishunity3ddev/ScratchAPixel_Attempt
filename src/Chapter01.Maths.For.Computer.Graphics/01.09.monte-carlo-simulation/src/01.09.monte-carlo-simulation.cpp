@@ -6,9 +6,9 @@
 #include <file_operations.h>
 
 // #define ONED
-#define VISUALIZE_TRANSMISSION 1
+#define VISUALIZE_TRANSMISSION 0
 #define VISUALIZE_REFLECTANCE 0
-#define VISUALIZE_ABSORPTION 0
+#define VISUALIZE_ABSORPTION 1
 
 // NOTE: 
 // -> In this monte carlo simulation, we are simulating what light photons go
@@ -215,14 +215,14 @@ MonteCarloLightTransportSimulation(double *&Records, const uint32_t &Size)
 #if !VISUALIZE_ABSORPTION
                 int Xi = (int)((PhotonPX + SlabSizeXY/2) / SlabSizeXY*Size);
                 int Yi = (int)((PhotonPY + SlabSizeXY/2) / SlabSizeXY*Size);
-
+                
                 bool Cond = false;
 #if VISUALIZE_TRANSMISSION
                 Cond = (PhotonVelZ > 0);
 #elif VISUALIZE_REFLECTANCE
                 Cond = (PhotonVelZ < 0);
 #endif
-
+                
                 if((Cond) && (Xi >= 0) && (PhotonPX < Size) && (Yi >= 0) &&
                    (Yi < Size))
                 {
@@ -288,16 +288,16 @@ main()
     
     double *Records = nullptr;
     const uint32_t Size = 512;
-
+    
     Records = new double[Size * Size * 3];
     memset(Records, 0, sizeof(double) * Size * Size * 3);
-
-    uint32_t NumPassesAllowed = 64;
+    
+    uint32_t NumPassesAllowed = 10;
     uint32_t PassCount = 1;
-
+    
     // The Image.
     float *Pixels = new float[Size * Size];
-
+    
     while(PassCount < NumPassesAllowed)
     {
         MonteCarloLightTransportSimulation(Records, Size);
