@@ -43,3 +43,5 @@ add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.08.inverse-transfo
 
 add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.09.monte-carlo-simulation)
 
+
+add_subdirectory(src/Chapter01.Maths.For.Computer.Graphics/01.10.monte-carlo-integration)
